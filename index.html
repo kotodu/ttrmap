@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ttrmap_tst01</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <script src="stopinfo/js/data_60-3_73.js"></script>
+<script>
+    var map;
+
+    function init() {
+        map = L.map('map01', { 
+            zoomControl: false
+        });
+        //鳥取駅
+        // var mpoint = [35.493795, 134.225827];
+
+        //青谷駅
+        var mpoint = [35.523346, 134.000636];
+        map.setView(mpoint, 15);
+        L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
+            attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル(淡色)</a>"
+        }).addTo(map);
+        L.control.zoom({position:'bottomright'}).addTo(map);
+        //---------------------------------------------
+        //(1)バス系統svg群
+        var route_lines = L.tileLayer('xyz/lbm/{z}/{x}/{y}.svg', {
+            minNativeZoom: 13,
+            minZoom: 10,
+            maxNativeZoom: 13,
+            maxZoom: 18,
+            attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
+        }).addTo(map);
+        //(2)バス停位置群
+        var icons01 = [];
+            for (var num in csv73) {
+                var pos = [csv73[num]["緯度"], csv73[num]["経度"]];
+                var con = csv73[num]["バス停名"] +'<'+ csv73[num]["上下循環区分"]+'>';
+                var pop = L.popup().setContent(con);
+                icons01[num] = L.marker(pos).bindPopup(pop);
+            }
+        var stop_icons01 = L.layerGroup(icons01);
+        stop_icons01.addTo(map);
+        //---------------------------------------------
+        //ここまでで設定したものを、以下で表示,非表示切替に
+        var overlay = {
+            // "stop_names": stop_names,
+            "stop_icons01": stop_icons01,
+            "route_lines": route_lines
+        }
+        //layersコントロールのオーバーレイに設定
+        L.control.layers(null, overlay).addTo(map);
+    }
+</script>
+</head>
+<body onload="init()">
+    <div id="map01" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
+</body>
+</html>
+
