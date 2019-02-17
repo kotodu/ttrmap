@@ -6,6 +6,9 @@
     <title>ttrmap_tst01</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <script src="stopinfo/js/data11.js"></script>
     <script src="stopinfo/js/data12.js"></script>
     <script src="stopinfo/js/data21.js"></script>
@@ -37,59 +40,57 @@
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         }).addTo(map);
         //(2)バス停位置群
-        var icons11 = [];
-        var icons12 = [];
-        var icons21 = [];
-        var icons22 = [];
         // (2.1)日ノ丸上り
+        var markers11 = L.markerClusterGroup();
+        var markers12 = L.markerClusterGroup();
+        var markers21 = L.markerClusterGroup();
+        var markers22 = L.markerClusterGroup();
         for (var num in data11) {
             var pass = data11[num];
             var pos = [pass["緯度"], pass["経度"]];
             var con = pass["バス停名"] +'<'+ pass["上下循環区分"]+'>';
             var pop = L.popup().setContent(con);
-            icons11[num] = L.marker(pos).bindPopup(pop);
+            markers11.addLayer(L.marker(pos).bindPopup(pop));
         }
-        var stop_icons11 = L.layerGroup(icons11);
-        stop_icons11.addTo(map);
         // (2.2)日ノ丸下り
         for (var num in data12) {
             var pass = data12[num];
             var pos = [pass["緯度"], pass["経度"]];
             var con = pass["バス停名"] +'<'+ pass["上下循環区分"]+'>';
             var pop = L.popup().setContent(con);
-            icons12[num] = L.marker(pos).bindPopup(pop);
+            markers12.addLayer(L.marker(pos).bindPopup(pop));
         }
-        var stop_icons12 = L.layerGroup(icons12);
-        stop_icons12.addTo(map);
         // (2.3)日交上り
         for (var num in data21) {
             var pass = data21[num];
             var pos = [pass["緯度"], pass["経度"]];
             var con = pass["バス停名"] +'<'+ pass["上下循環区分"]+'>';
             var pop = L.popup().setContent(con);
-            icons21[num] = L.marker(pos).bindPopup(pop);
+            markers21.addLayer(L.marker(pos).bindPopup(pop));
         }
-        var stop_icons21 = L.layerGroup(icons21);
-        stop_icons21.addTo(map);
         // (2.4)日交下り
         for (var num in data22) {
             var pass = data22[num];
             var pos = [pass["緯度"], pass["経度"]];
             var con = pass["バス停名"] +'<'+ pass["上下循環区分"]+'>';
             var pop = L.popup().setContent(con);
-            icons22[num] = L.marker(pos).bindPopup(pop);
+            markers22.addLayer(L.marker(pos).bindPopup(pop));
         }
-        var stop_icons22 = L.layerGroup(icons22);
-        stop_icons22.addTo(map);
-        // もう少し賢いものを書けないものか...for4回とか？
-        // 低いzoomlevel(10とか)だと重すぎて詰む、軽量化を。
+        map.addLayer(markers11);
+        map.addLayer(markers12);
+        map.addLayer(markers21);
+        map.addLayer(markers22);
         //---------------------------------------------
-        //ここまでで設定したものを、以下で表示,非表示切替に
+        // ->markerClusterプラグインを導入。以下例
+        // var markers = L.markerClusterGroup();
+        // markers.addLayer(L.marker(getRandomLatLng(map)));
+        //     // ... Add more layers ...
+        // map.addLayer(markers);
         var overlay = {
-            "停留所(日ノ丸自動車)(上り)<br>stops(Hinomaru bus)(inbound)<hr>": stop_icons11,
-            "停留所(日ノ丸自動車)(下り)<br>stops(Hinomaru bus)(outbound)<hr>": stop_icons12,
-            "停留所(日本交通)(上り)<br>stops(Nikko bus)(inbound)<hr>": stop_icons21,
-            "停留所(日本交通)(下り)<br>stops(Nikko bus)(outbound)<hr>": stop_icons22,
+            "停留所(日ノ丸自動車)(上り)<br>stops(Hinomaru bus)(inbound)<hr>": markers11,
+            "停留所(日ノ丸自動車)(下り)<br>stops(Hinomaru bus)(outbound)<hr>": markers12,
+            "停留所(日本交通)(上り)<br>stops(Nikko bus)(inbound)<hr>": markers21,
+            "停留所(日本交通)(下り)<br>stops(Nikko bus)(outbound)<hr>": markers22,
             "バス経路(ローカル)<br>routes(local bus)<hr>": route_lines
         }
         //layersコントロールのオーバーレイに設定
