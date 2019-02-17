@@ -6,7 +6,10 @@
     <title>ttrmap_tst01</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
-    <script src="stopinfo/js/data_60-3_73.js"></script>
+    <script src="stopinfo/js/data11.js"></script>
+    <script src="stopinfo/js/data12.js"></script>
+    <script src="stopinfo/js/data21.js"></script>
+    <script src="stopinfo/js/data22.js"></script>
 <script>
     var map;
 
@@ -34,21 +37,60 @@
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         }).addTo(map);
         //(2)バス停位置群
-        var icons01 = [];
-            for (var num in csv73) {
-                var pos = [csv73[num]["緯度"], csv73[num]["経度"]];
-                var con = csv73[num]["バス停名"] +'<'+ csv73[num]["上下循環区分"]+'>';
-                var pop = L.popup().setContent(con);
-                icons01[num] = L.marker(pos).bindPopup(pop);
-            }
-        var stop_icons01 = L.layerGroup(icons01);
-        stop_icons01.addTo(map);
+        var icons11 = [];
+        var icons12 = [];
+        var icons21 = [];
+        var icons22 = [];
+        // (2.1)日ノ丸上り
+        for (var num in data11) {
+            var pass = data11[num];
+            var pos = [pass["緯度"], pass["経度"]];
+            var con = pass["バス停名"] +'<'+ pass["上下循環区分"]+'>';
+            var pop = L.popup().setContent(con);
+            icons11[num] = L.marker(pos).bindPopup(pop);
+        }
+        var stop_icons11 = L.layerGroup(icons11);
+        stop_icons11.addTo(map);
+        // (2.2)日ノ丸下り
+        for (var num in data12) {
+            var pass = data12[num];
+            var pos = [pass["緯度"], pass["経度"]];
+            var con = pass["バス停名"] +'<'+ pass["上下循環区分"]+'>';
+            var pop = L.popup().setContent(con);
+            icons12[num] = L.marker(pos).bindPopup(pop);
+        }
+        var stop_icons12 = L.layerGroup(icons12);
+        stop_icons12.addTo(map);
+        // (2.3)日交上り
+        for (var num in data21) {
+            var pass = data21[num];
+            var pos = [pass["緯度"], pass["経度"]];
+            var con = pass["バス停名"] +'<'+ pass["上下循環区分"]+'>';
+            var pop = L.popup().setContent(con);
+            icons21[num] = L.marker(pos).bindPopup(pop);
+        }
+        var stop_icons21 = L.layerGroup(icons21);
+        stop_icons21.addTo(map);
+        // (2.4)日交下り
+        for (var num in data22) {
+            var pass = data22[num];
+            var pos = [pass["緯度"], pass["経度"]];
+            var con = pass["バス停名"] +'<'+ pass["上下循環区分"]+'>';
+            var pop = L.popup().setContent(con);
+            icons22[num] = L.marker(pos).bindPopup(pop);
+        }
+        var stop_icons22 = L.layerGroup(icons22);
+        stop_icons22.addTo(map);
+        // もう少し賢いものを書けないものか...for4回とか？
+        // 低いzoomlevel(10とか)だと重すぎて詰む、軽量化を。
         //---------------------------------------------
         //ここまでで設定したものを、以下で表示,非表示切替に
         var overlay = {
-            // "stop_names": stop_names,
-            "stop_icons01": stop_icons01,
-            "route_lines": route_lines
+            "停留所(日ノ丸自動車)(上り)<br>stops(Hinomaru bus)(inbound)<hr>": stop_icons11,
+            "停留所(日ノ丸自動車)(下り)<br>stops(Hinomaru bus)(outbound)<hr>": stop_icons12,
+            "停留所(日本交通)(上り)<br>stops(Nikko bus)(inbound)<hr>": stop_icons21,
+            "停留所(日本交通)(下り)<br>stops(Nikko bus)(outbound)<hr>": stop_icons22,
+            "バス経路(ローカル)<br>routes(local bus)<hr>": route_lines
         }
         //layersコントロールのオーバーレイに設定
         L.control.layers(null, overlay).addTo(map);
