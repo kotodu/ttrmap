@@ -18,7 +18,9 @@
 
     function init() {
         map = L.map('map01', { 
-            zoomControl: false
+            zoomControl: false,
+            minZoom: 12,
+            maxZoom: 18,
         });
         //鳥取駅
         // var mpoint = [35.493795, 134.225827];
@@ -34,7 +36,7 @@
         //(1)バス系統svg群
         var route_lines = L.tileLayer('xyz/lbm/{z}/{x}/{y}.svg', {
             minNativeZoom: 13,
-            minZoom: 10,
+            minZoom: 13,
             maxNativeZoom: 13,
             maxZoom: 18,
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
@@ -76,6 +78,8 @@
             var pop = L.popup().setContent(con);
             markers22.addLayer(L.marker(pos).bindPopup(pop));
         }
+        // Tottori City Information Map(とっとり市地図情報サービス)を利用した旨helpに記載のこと
+        // "<a href='https://www.city.tottori.lg.jp' target='_blank'>鳥取市(CC BY 2.1)</a>"
         map.addLayer(markers11);
         map.addLayer(markers12);
         map.addLayer(markers21);
