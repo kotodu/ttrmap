@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <!-- ここまでleaflet絡み -->
+    <script src="add/leaflet-hash.js"></script>
+    <!-- 上のhash.jsは外部プラグイン -->
     <!-- ここから独自 -->
     <link rel="stylesheet" href="add/main.css">
     <script src="stopinfo/js/data11.js"></script>
@@ -18,7 +20,7 @@
     <script src="stopinfo/js/data22.js"></script>
 <script>
     var map;
-
+    var hash = new L.Hash(map);
     function init() {
         map = L.map('map01', { 
             zoomControl: false,
