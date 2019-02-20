@@ -1,4 +1,26 @@
 
-/* ポップアップ用CSS */
+#map01{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:3vh;
+}
+
+#link{
+    position:absolute;
+    top:97vh;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color: burlywood;
+    font-size: 2vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+}
 
 
+a {
+    color: black;
+    }
+    

@@ -90,8 +90,6 @@
             var pop = L.popup().setContent(con);
             markers22.addLayer(L.marker(pos).bindPopup(pop));
         }
-        // Tottori City Information Map(とっとり市地図情報サービス)を利用した旨helpに記載のこと
-        // "<a href='https://www.city.tottori.lg.jp' target='_blank'>鳥取市(CC BY 2.1)</a>"
         // map.addLayer(markers11);
         // map.addLayer(markers12);
         // map.addLayer(markers21);
@@ -131,7 +129,11 @@
 </script>
 </head>
 <body onload="init()">
-    <div id="map01" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
+    <div id="map01"></div>
+    <div id="link">
+        tottori transportation map
+        <a href="README.md">使い方や利用規約など</a>
+    </div>
 </body>
 </html>
 
