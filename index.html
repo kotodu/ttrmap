@@ -3,13 +3,19 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>ttrmap_tst01</title>
+    <meta name="description" content="鳥取の交通をレイヤー表示した地図です" />
+    <meta name="keywords" content="鳥取,路線図,バス,日本交通,日ノ丸自動車" />
+    <title>tottori transportation map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
     <!-- ここまでleaflet絡み -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!-- 上のはアイコン使う -->
     <script src="add/leaflet-hash.js"></script>
     <!-- 上のhash.jsは外部プラグイン -->
     <!-- ここから独自 -->
@@ -21,21 +27,23 @@
 <script>
     var map;
     var hash = new L.Hash(map);
+    // // 鳥取駅
+    var m00 = [35.493795, 134.225827];
+    // // 岩美駅
+    // var m02 = [35.574366,134.3333323];
+    // // 用瀬駅
+    // var m03 = [35.343057,134.2025463];
+    // // 青谷駅
+    // var m04 = [35.523346, 134.000636];
+    // var mpoint = m00;
     function init() {
         map = L.map('map01', { 
             zoomControl: false,
             minZoom: 12,
-            maxZoom: 18,
+            maxZoom: 17,
         });
-        // 鳥取駅
-        // var mpoint = [35.493795, 134.225827];
-        // 岩美駅
-        // var mpoint = [35.574366,134.3333323];
-        // 用瀬駅
-        var mpoint = [35.343057,134.2025463];
-        // 青谷駅
-        // var mpoint = [35.523346, 134.000636];
-        map.setView(mpoint, 13);
+        // map.setView(mpoint, 14);
+        map.setView(m00, 14);
         L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
             attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル(淡色)</a>"
         }).addTo(map);
@@ -47,7 +55,7 @@
             minNativeZoom: 13,
             minZoom: 12,
             maxNativeZoom: 13,
-            maxZoom: 18,
+            maxZoom: 17,
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         }).addTo(map);
         // });
@@ -99,21 +107,13 @@
         // controlで選択されて初めて追加
         //---------------------------------------------
         // (3)バス追加情報
-        // var lbm_infowide = L.tileLayer('xyz/lbm_infowide/{z}/{x}/{y}.svg', {
-        //     minNativeZoom: 13,
-        //     minZoom: 12,
-        //     maxNativeZoom: 13,
-        //     maxZoom: 14,
-        //     attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
-        // }).addTo(map);
-        // localで全て代用するように変更
+        // wideは使用せず、localで全て代用するように変更
         var lbm_infolocal = L.tileLayer('xyz/lbm_infolocal/{z}/{x}/{y}.svg', {
             minNativeZoom: 13,
             minZoom: 13,
             maxNativeZoom: 13,
-            maxZoom: 18,
+            maxZoom: 17,
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
-        // }).addTo(map);
         });
         //---------------------------------------------
         var overlays = {
@@ -127,15 +127,19 @@
         //なお、複数コントロールも可能
         //layersコントロールのオーバーレイに設定
         L.control.layers(null, overlays).addTo(map);
+        //---------------------------------------------
+        // (add01)EasyButton
+        L.easyButton('fas fa-book-open', function(btn, easyMap){
+            window.open("README.md");
+        },'README.md', {
+        position: 'bottomright'
+        }).addTo(map);
     }
 </script>
 </head>
 <body onload="init()">
     <div id="map01"></div>
-    <div id="link">
-        tottori transportation map
-        <a href="README.md">使い方や利用規約など</a>
-    </div>
+    <!-- 今後は、地図の初期位置を青谷や用瀬など、場所入れ替えられると良いね -->
 </body>
 </html>
 
