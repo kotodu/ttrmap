@@ -22,31 +22,32 @@
             minZoom: 12,
             maxZoom: 18,
         });
-        //鳥取駅
-        var mpoint = [35.493795, 134.225827];
-
+        // 鳥取駅
+        // var mpoint = [35.493795, 134.225827];
         // 岩美駅
         // var mpoint = [35.574366,134.3333323];
-
-        // 岩美駅
-        // var mpoint = [35.343057,134.2025463];
-
-        //青谷駅
+        // 用瀬駅
+        var mpoint = [35.343057,134.2025463];
+        // 青谷駅
         // var mpoint = [35.523346, 134.000636];
-        map.setView(mpoint, 15);
+        map.setView(mpoint, 13);
         L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
             attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル(淡色)</a>"
         }).addTo(map);
         L.control.zoom({position:'bottomright'}).addTo(map);
         //---------------------------------------------
+        // ローカルバス群
         //(1)バス系統svg群
-        var route_lines = L.tileLayer('xyz/lbm/{z}/{x}/{y}.svg', {
+        var lbm_lines = L.tileLayer('xyz/lbm/{z}/{x}/{y}.svg', {
             minNativeZoom: 13,
-            minZoom: 13,
+            minZoom: 12,
             maxNativeZoom: 13,
             maxZoom: 18,
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         }).addTo(map);
+        // });
+        // 経路については予め配置しておく
+        //---------------------------------------------
         //(2)バス停位置群
         // (2.1)日ノ丸上り
         var markers11 = L.markerClusterGroup();
@@ -86,25 +87,41 @@
         }
         // Tottori City Information Map(とっとり市地図情報サービス)を利用した旨helpに記載のこと
         // "<a href='https://www.city.tottori.lg.jp' target='_blank'>鳥取市(CC BY 2.1)</a>"
-        map.addLayer(markers11);
-        map.addLayer(markers12);
-        map.addLayer(markers21);
-        map.addLayer(markers22);
+        // map.addLayer(markers11);
+        // map.addLayer(markers12);
+        // map.addLayer(markers21);
+        // map.addLayer(markers22);
+        // controlで選択されて初めて追加
         //---------------------------------------------
-        // ->markerClusterプラグインを導入。以下例
-        // var markers = L.markerClusterGroup();
-        // markers.addLayer(L.marker(getRandomLatLng(map)));
-        //     // ... Add more layers ...
-        // map.addLayer(markers);
-        var overlay = {
+        // (3)バス追加情報
+        // var lbm_infowide = L.tileLayer('xyz/lbm_infowide/{z}/{x}/{y}.svg', {
+        //     minNativeZoom: 13,
+        //     minZoom: 12,
+        //     maxNativeZoom: 13,
+        //     maxZoom: 14,
+        //     attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
+        // }).addTo(map);
+        // localで全て代用するように変更
+        var lbm_infolocal = L.tileLayer('xyz/lbm_infolocal/{z}/{x}/{y}.svg', {
+            minNativeZoom: 13,
+            minZoom: 13,
+            maxNativeZoom: 13,
+            maxZoom: 18,
+            attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
+        // }).addTo(map);
+        });
+        //---------------------------------------------
+        var overlays = {
             "停留所(日ノ丸自動車)(上り)<br>stops(Hinomaru bus)(inbound)<hr>": markers11,
             "停留所(日ノ丸自動車)(下り)<br>stops(Hinomaru bus)(outbound)<hr>": markers12,
             "停留所(日本交通)(上り)<br>stops(Nikko bus)(inbound)<hr>": markers21,
             "停留所(日本交通)(下り)<br>stops(Nikko bus)(outbound)<hr>": markers22,
-            "バス経路(ローカル)<br>routes(local bus)<hr>": route_lines
+            "バス経路(ローカル)<br>routes(local bus)<hr>": lbm_lines,
+            "バス情報(ローカル)<br>Information(local bus)<hr>":lbm_infolocal
         }
+        //なお、複数コントロールも可能
         //layersコントロールのオーバーレイに設定
-        L.control.layers(null, overlay).addTo(map);
+        L.control.layers(null, overlays).addTo(map);
     }
 </script>
 </head>
