@@ -2,7 +2,7 @@
 # tottori transportation map(TTRmap)
 ## Version
 
-- 01a(2019/02/20)
+- 01a(2019/02/21)
     - ローカルバスマップ(lbm)レイヤーで試行
     - 鳥取市のみ、バス停位置に対応
 
