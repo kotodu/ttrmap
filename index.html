@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="鳥取の交通をレイヤー表示した地図です" />
+    <meta name="keywords" content="鳥取,路線図,バス,日本交通,日ノ丸自動車" />
+    <title>tottori transportation map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+    <!-- ここまでleaflet絡み -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!-- 上のはアイコン使う -->
+    <script src="add/leaflet-hash.js"></script>
+    <!-- 上のhash.jsは外部プラグイン -->
+    <!-- ここから独自 -->
+    <link rel="stylesheet" href="add/main.css">
+    <script src="stopinfo/js/data11.js"></script>
+    <script src="stopinfo/js/data12.js"></script>
+    <script src="stopinfo/js/data21.js"></script>
+    <script src="stopinfo/js/data22.js"></script>
+<script>
+    var map;
+    var hash = new L.Hash(map);
+    // // 鳥取駅
+    var m00 = [35.493795, 134.225827];
+    // // 岩美駅
+    // var m02 = [35.574366,134.3333323];
+    // // 用瀬駅
+    // var m03 = [35.343057,134.2025463];
+    // // 青谷駅
+    // var m04 = [35.523346, 134.000636];
+    // var mpoint = m00;
+    function init() {
+        map = L.map('map01', { 
+            zoomControl: false,
+            minZoom: 12,
+            maxZoom: 17,
+        });
+        // map.setView(mpoint, 14);
+        map.setView(m00, 14);
+        L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
+            attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル(淡色)</a>"
+        }).addTo(map);
+        L.control.zoom({position:'bottomright'}).addTo(map);
+        //---------------------------------------------
+        // ローカルバス群
+        //(1)バス系統svg群
+        var lbm_lines = L.tileLayer('xyz/lbm/{z}/{x}/{y}.svg', {
+            minNativeZoom: 13,
+            minZoom: 12,
+            maxNativeZoom: 13,
+            maxZoom: 17,
+            attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
+        }).addTo(map);
+        // });
+        // 経路については予め配置しておく
+        //---------------------------------------------
+        //(2)バス停位置群
+        // (2.1)日ノ丸上り
+        var markers11 = L.markerClusterGroup();
+        var markers12 = L.markerClusterGroup();
+        var markers21 = L.markerClusterGroup();
+        var markers22 = L.markerClusterGroup();
+        // 将来、外国語対応やバス停情報に路線情報をリンクさせる等の場合、
+        // conを変えてpass["意訳英語名称"]や<a>路線情報</a>などを検討？
+        for (var num in data11) {
+            var pass = data11[num];
+            var pos = [pass["緯度"], pass["経度"]];
+            var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            var pop = L.popup().setContent(con);
+            markers11.addLayer(L.marker(pos).bindPopup(pop));
+        }
+        // (2.2)日ノ丸下り
+        for (var num in data12) {
+            var pass = data12[num];
+            var pos = [pass["緯度"], pass["経度"]];
+            var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            var pop = L.popup().setContent(con);
+            markers12.addLayer(L.marker(pos).bindPopup(pop));
+        }
+        // (2.3)日交上り
+        for (var num in data21) {
+            var pass = data21[num];
+            var pos = [pass["緯度"], pass["経度"]];
+            var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            var pop = L.popup().setContent(con);
+            markers21.addLayer(L.marker(pos).bindPopup(pop));
+        }
+        // (2.4)日交下り
+        for (var num in data22) {
+            var pass = data22[num];
+            var pos = [pass["緯度"], pass["経度"]];
+            var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            var pop = L.popup().setContent(con);
+            markers22.addLayer(L.marker(pos).bindPopup(pop));
+        }
+        // map.addLayer(markers11);
+        // map.addLayer(markers12);
+        // map.addLayer(markers21);
+        // map.addLayer(markers22);
+        // controlで選択されて初めて追加
+        //---------------------------------------------
+        // (3)バス追加情報
+        // wideは使用せず、localで全て代用するように変更
+        var lbm_infolocal = L.tileLayer('xyz/lbm_infolocal/{z}/{x}/{y}.svg', {
+            minNativeZoom: 13,
+            minZoom: 13,
+            maxNativeZoom: 13,
+            maxZoom: 17,
+            attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
+        });
+        //---------------------------------------------
+        var overlays = {
+            "停留所(日ノ丸自動車)(上り)<br>stops(Hinomaru bus)(inbound)<hr>": markers11,
+            "停留所(日ノ丸自動車)(下り)<br>stops(Hinomaru bus)(outbound)<hr>": markers12,
+            "停留所(日本交通)(上り)<br>stops(Nikko bus)(inbound)<hr>": markers21,
+            "停留所(日本交通)(下り)<br>stops(Nikko bus)(outbound)<hr>": markers22,
+            "バス経路(ローカル)<br>routes(local bus)<hr>": lbm_lines,
+            "バス情報(ローカル)<br>Information(local bus)<hr>":lbm_infolocal
+        }
+        //なお、複数コントロールも可能
+        //layersコントロールのオーバーレイに設定
+        L.control.layers(null, overlays).addTo(map);
+        //---------------------------------------------
+        // (add01)EasyButton
+        L.easyButton('fas fa-book-open', function(btn, easyMap){
+            window.open("README.md");
+        },'README.md', {
+        position: 'bottomright'
+        }).addTo(map);
+    }
+</script>
+</head>
+<body onload="init()">
+    <div id="map01"></div>
+    <!-- 今後は、地図の初期位置を青谷や用瀬など、場所入れ替えられると良いね -->
+</body>
+</html>
+
