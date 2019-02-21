@@ -26,7 +26,6 @@
     <script src="stopinfo/js/data22.js"></script>
 <script>
     var map;
-    var hash = new L.Hash(map);
     // // 鳥取駅
     var m00 = [35.493795, 134.225827];
     // // 岩美駅
@@ -134,6 +133,8 @@
         },'README.md', {
         position: 'bottomright'
         }).addTo(map);
+        var hash = new L.Hash(map);
+        hash.addTo(map);
     }
 </script>
 </head>
