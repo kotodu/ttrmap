@@ -51,11 +51,8 @@
         // ローカルバス群
         //(1)バス系統svg群
         var lbm_lines = L.tileLayer('xyz/lbm/{z}/{x}/{y}.svg', {
-            minNativeZoom: 13,
-            minZoom: 12,
-            maxNativeZoom: 13,
-            maxZoom: 17,
-            //試験的
+            // 豊多摩研究所様の助言のおかげでモバイル表示不具合に対処できました！
+            // ありがとございます
             tileSize : 4096,
             minNativeZoom: 17,
             minZoom: 12,
@@ -114,9 +111,12 @@
         // (3)バス追加情報
         // wideは使用せず、localで全て代用するように変更
         var lbm_infolocal = L.tileLayer('xyz/lbm_infolocal/{z}/{x}/{y}.svg', {
-            minNativeZoom: 13,
-            minZoom: 13,
-            maxNativeZoom: 13,
+            // 豊多摩研究所様の助言のおかげでモバイル表示不具合に対処できました！
+            // ありがとございます
+            tileSize : 4096,
+            minNativeZoom: 17,
+            minZoom: 12,
+            maxNativeZoom: 17,
             maxZoom: 17,
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         });
