@@ -53,11 +53,16 @@
         var lbm_lines = L.tileLayer('xyz/lbm/{z}/{x}/{y}.svg', {
             // 豊多摩研究所様の助言のおかげでモバイル表示不具合に対処できました！
             // ありがとございます
-            tileSize : 4096,
-            minNativeZoom: 17,
+            tileSize : 1024,
+            minNativeZoom: 15,
             minZoom: 12,
-            maxNativeZoom: 17,
+            maxNativeZoom: 15,
             maxZoom: 17, 
+            // tileSize : 4096,
+            // minNativeZoom: 17,
+            // minZoom: 12,
+            // maxNativeZoom: 17,
+            // maxZoom: 17, 
            attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         }).addTo(map);
         // });
@@ -113,11 +118,16 @@
         var lbm_infolocal = L.tileLayer('xyz/lbm_infolocal/{z}/{x}/{y}.svg', {
             // 豊多摩研究所様の助言のおかげでモバイル表示不具合に対処できました！
             // ありがとございます
-            tileSize : 4096,
-            minNativeZoom: 17,
+            tileSize : 1024,
+            minNativeZoom: 15,
             minZoom: 12,
-            maxNativeZoom: 17,
+            maxNativeZoom: 15,
             maxZoom: 17,
+            // tileSize : 4096,
+            // minNativeZoom: 17,
+            // minZoom: 12,
+            // maxNativeZoom: 17,
+            // maxZoom: 17,
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         });
         //---------------------------------------------
