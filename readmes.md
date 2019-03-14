@@ -6,6 +6,8 @@
     - ローカルバスマップ(lbm)レイヤーで試行
     - 鳥取市のみ、バス停位置に対応
 
+- 01b(2019/03/14)
+    - lbmレイヤーの描画方法を変更(svgからpngへ)
 
 ## TTRmapとは？
 鳥取県東部地域(鳥取市,岩美町,八頭町,若桜町,智頭町)の交通についてまとめた地図を、ウェブマップサービスと重ね合わせて見ることのできるサイトです。
@@ -88,7 +90,7 @@
 ## バス路線レイヤー
 ©busroutemap (Creative Commons BY 4.0)
 
-下記を除く全ては、著作者個人の調査に基づきます
+道路形状情報を除く全ては、著作者個人の調査に基づきます
 
 道路形状情報 : ©openstreetmap contributors
 
@@ -99,8 +101,11 @@
 
 ## バス停情報
 Tottori City Information Map(とっとり市地図情報サービス)データを利用
+
+(Creative Commons BY 2.1)
+
 データ取得日 : 2019/01/27
 
-[鳥取市(Creative Commons BY 2.1)](https://www.city.tottori.lg.jp)
+[鳥取市](https://www.city.tottori.lg.jp)
 
 [とっとり市地図情報サービス](https://gis.city.tottori.lg.jp/webgis/?p=1)
