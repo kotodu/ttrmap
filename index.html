@@ -35,6 +35,24 @@
     // // 青谷駅
     // var m04 = [35.523346, 134.000636];
     // var mpoint = m00;
+    //---------------------------------------------
+    // (0.1)アイコン群の設定
+    // L.maker(pos,{add})のaddに{icon:i_hn}など
+    var i_hn = L.icon({
+        iconUrl: 'icons/hn.png', 
+        iconRetinaUrl: 'icons/hnb.png',
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        popupAnchor: [0, -50],
+    });
+    var i_nh = L.icon({
+        iconUrl: 'icons/nh.png', 
+        iconRetinaUrl: 'icons/nhb.png',
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        popupAnchor: [0, -50],
+    });
+    //---------------------------------------------
     function init() {
         map = L.map('map01', { 
             zoomControl: false,
@@ -49,22 +67,6 @@
         L.control.zoom({position:'bottomright'}).addTo(map);
         //---------------------------------------------
         // ローカルバス群
-        //(1)バス系統svg群
-        // var lbm_lines = L.tileLayer('xyz/lbm/{z}/{x}/{y}.svg', {
-        //     tileSize : 1024,
-        //     minNativeZoom: 15,
-        //     minZoom: 12,
-        //     maxNativeZoom: 15,
-        //     maxZoom: 17, 
-        //     // tileSize : 4096,
-        //     // minNativeZoom: 17,
-        //     // minZoom: 12,
-        //     // maxNativeZoom: 17,
-        //     // maxZoom: 17, 
-        //    attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
-        // }).addTo(map);
-        // });
-        // 経路については予め配置しておく
         // (1.1)ローカルバス系統png群
         var lbm_lines = L.tileLayer('xyz/lbmli/{z}/{x}/{y}.png', {
             // PNGによるタイル
@@ -99,7 +101,7 @@
             var pos = [pass["緯度"], pass["経度"]];
             var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
-            markers11.addLayer(L.marker(pos).bindPopup(pop));
+            markers11.addLayer(L.marker(pos,{icon:i_hn}).bindPopup(pop));
         }
         // (2.2)日ノ丸下り
         for (var num in data12) {
@@ -107,7 +109,7 @@
             var pos = [pass["緯度"], pass["経度"]];
             var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
-            markers12.addLayer(L.marker(pos).bindPopup(pop));
+            markers12.addLayer(L.marker(pos,{icon:i_hn}).bindPopup(pop));
         }
         // (2.3)日交上り
         for (var num in data21) {
@@ -115,7 +117,7 @@
             var pos = [pass["緯度"], pass["経度"]];
             var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
-            markers21.addLayer(L.marker(pos).bindPopup(pop));
+            markers21.addLayer(L.marker(pos,{icon:i_nh}).bindPopup(pop));
         }
         // (2.4)日交下り
         for (var num in data22) {
@@ -123,24 +125,9 @@
             var pos = [pass["緯度"], pass["経度"]];
             var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
-            markers22.addLayer(L.marker(pos).bindPopup(pop));
+            markers22.addLayer(L.marker(pos,{icon:i_nh}).bindPopup(pop));
         }
-        //---------------------------------------------
-        // (3)バス追加情報
-        // wideは使用せず、localで全て代用するように変更
-        // var lbm_infolocal = L.tileLayer('xyz/lbm_infolocal/{z}/{x}/{y}.svg', {
-        //     tileSize : 1024,
-        //     minNativeZoom: 15,
-        //     minZoom: 12,
-        //     maxNativeZoom: 15,
-        //     maxZoom: 17,
-        //     // tileSize : 4096,
-        //     // minNativeZoom: 17,
-        //     // minZoom: 12,
-        //     // maxNativeZoom: 17,
-        //     // maxZoom: 17,
-        //     attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
-        // });
+
         //---------------------------------------------
         var overlays = {
             "停留所(日ノ丸自動車)(上り)<br>stops(Hinomaru bus)(inbound)<hr>": markers11,
@@ -157,7 +144,6 @@
         // (add01)EasyButton
         L.easyButton('fas fa-book-open', function(btn, easyMap){
             window.open("help/");
-
         },'README', {
         position: 'bottomright'
         }).addTo(map);
