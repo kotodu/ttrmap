@@ -64,7 +64,6 @@
         L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
             attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル(淡色)</a>"
         }).addTo(map);
-        L.control.zoom({position:'bottomright'}).addTo(map);
         //---------------------------------------------
         // ローカルバス群
         // (1.1)ローカルバス系統png群
@@ -89,11 +88,16 @@
         });
         //---------------------------------------------
         //(2)バス停位置群
+        // var markers11 = L.markerClusterGroup();
+        // var markers12 = L.markerClusterGroup();
+        // var markers21 = L.markerClusterGroup();
+        // var markers22 = L.markerClusterGroup();
+        // lbm_m_in : 上りバス停群
+        // lbm_m_out : 下りバス停群
+        var lbm_m_in = L.markerClusterGroup();
+        var lbm_m_out = L.markerClusterGroup();
+        // var obm = L.markerClusterGroup();
         // (2.1)日ノ丸上り
-        var markers11 = L.markerClusterGroup();
-        var markers12 = L.markerClusterGroup();
-        var markers21 = L.markerClusterGroup();
-        var markers22 = L.markerClusterGroup();
         // 将来、外国語対応やバス停情報に路線情報をリンクさせる等の場合、
         // conを変えてpass["意訳英語名称"]や<a>路線情報</a>などを検討？
         for (var num in data11) {
@@ -101,7 +105,7 @@
             var pos = [pass["緯度"], pass["経度"]];
             var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
-            markers11.addLayer(L.marker(pos,{icon:i_hn}).bindPopup(pop));
+            lbm_m_in.addLayer(L.marker(pos,{icon:i_hn}).bindPopup(pop));
         }
         // (2.2)日ノ丸下り
         for (var num in data12) {
@@ -109,7 +113,7 @@
             var pos = [pass["緯度"], pass["経度"]];
             var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
-            markers12.addLayer(L.marker(pos,{icon:i_hn}).bindPopup(pop));
+            lbm_m_out.addLayer(L.marker(pos,{icon:i_hn}).bindPopup(pop));
         }
         // (2.3)日交上り
         for (var num in data21) {
@@ -117,7 +121,7 @@
             var pos = [pass["緯度"], pass["経度"]];
             var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
-            markers21.addLayer(L.marker(pos,{icon:i_nh}).bindPopup(pop));
+            lbm_m_in.addLayer(L.marker(pos,{icon:i_nh}).bindPopup(pop));
         }
         // (2.4)日交下り
         for (var num in data22) {
@@ -125,31 +129,38 @@
             var pos = [pass["緯度"], pass["経度"]];
             var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
-            markers22.addLayer(L.marker(pos,{icon:i_nh}).bindPopup(pop));
+            lbm_m_out.addLayer(L.marker(pos,{icon:i_nh}).bindPopup(pop));
         }
 
         //---------------------------------------------
+        // (add01)レイヤー表示切替
+        // 2019/04/19レイヤーグループの規則変更
         var overlays = {
-            "停留所(日ノ丸自動車)(上り)<br>stops(Hinomaru bus)(inbound)<hr>": markers11,
-            "停留所(日ノ丸自動車)(下り)<br>stops(Hinomaru bus)(outbound)<hr>": markers12,
-            "停留所(日本交通)(上り)<br>stops(Nikko bus)(inbound)<hr>": markers21,
-            "停留所(日本交通)(下り)<br>stops(Nikko bus)(outbound)<hr>": markers22,
-            "バス経路(ローカル)<br>routes(local bus)<hr>": lbm_lines,
-            "バス情報(ローカル)<br>Information(local bus)<hr>":lbm_infolocal
+            "<b>(路線バス)</b> 停留所 <上り><br>(local bus) stops < inbound ><hr>": lbm_m_in,
+            "<b>(路線バス)</b> 停留所 <下り><br>(local bus) stops < outbound ><hr>": lbm_m_out,
+            "<b>(路線バス)</b> 経路情報<br>routes(local bus)<hr>": lbm_lines,
+            "<b>(路線バス)</b> 系統情報<br>Information(local bus)<hr>":lbm_infolocal
         }
-        //なお、複数コントロールも可能
+//---------------------------------------------
         //layersコントロールのオーバーレイに設定
         L.control.layers(null, overlays).addTo(map);
+        // (add02)ズームボタン
+        L.control.zoom({position:'topright'}).addTo(map);
         //---------------------------------------------
-        // (add01)EasyButton
+        // (add03)EasyButton
         L.easyButton('fas fa-book-open', function(btn, easyMap){
             window.open("help/");
         },'README', {
-        position: 'bottomright'
+        position: 'topright'
+        // position: 'bottomright'
         }).addTo(map);
+        //---------------------------------------------
+        // (add04)hash
         var hash = new L.Hash(map);
         hash.addTo(map);
     }
+
+
 </script>
 </head>
 <body onload="init()">
