@@ -6,15 +6,24 @@
     <meta name="description" content="鳥取の交通をレイヤー表示した地図です" />
     <meta name="keywords" content="鳥取,路線図,バス,日本交通,日ノ丸自動車,バスマップ,バス路線図,busmap" />
     <title>tottori transportation map</title>
+    <!-- //--------------------------------------------- -->
+    <!-- ここから最優先CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <!-- //--------------------------------------------- -->
+    <!-- ここから各プラグイン -->
+    <!-- controlLocate -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.66.2/dist/L.Control.Locate.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.66.2/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+    <!-- makerクラスタ -->
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <!-- //--------------------------------------------- -->
+    <!-- easyボタン アイコンは4.7.0に変更 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
     <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
-    <!-- ここまでleaflet絡み -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <!-- 上のはアイコン使う -->
     <script src="add/leaflet-hash.js"></script>
     <!-- 上のhash.jsは外部プラグイン -->
@@ -28,13 +37,6 @@
     var map;
     // // 鳥取駅
     var m00 = [35.493795, 134.225827];
-    // // 岩美駅
-    // var m02 = [35.574366,134.3333323];
-    // // 用瀬駅
-    // var m03 = [35.343057,134.2025463];
-    // // 青谷駅
-    // var m04 = [35.523346, 134.000636];
-    // var mpoint = m00;
     //---------------------------------------------
     // (0.1)アイコン群の設定
     // L.maker(pos,{add})のaddに{icon:i_hn}など
@@ -59,7 +61,6 @@
             minZoom: 12,
             maxZoom: 17,
         });
-        // map.setView(mpoint, 14);
         map.setView(m00, 14);
         L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
             attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル(淡色)</a>"
@@ -88,10 +89,6 @@
         });
         //---------------------------------------------
         //(2)バス停位置群
-        // var markers11 = L.markerClusterGroup();
-        // var markers12 = L.markerClusterGroup();
-        // var markers21 = L.markerClusterGroup();
-        // var markers22 = L.markerClusterGroup();
         // lbm_m_in : 上りバス停群
         // lbm_m_out : 下りバス停群
         var lbm_m_in = L.markerClusterGroup();
@@ -141,23 +138,35 @@
             "<b>(路線バス)</b> 経路情報<br>routes(local bus)<hr>": lbm_lines,
             "<b>(路線バス)</b> 系統情報<br>Information(local bus)<hr>":lbm_infolocal
         }
-//---------------------------------------------
+        //---------------------------------------------
         //layersコントロールのオーバーレイに設定
         L.control.layers(null, overlays).addTo(map);
         // (add02)ズームボタン
         L.control.zoom({position:'topright'}).addTo(map);
         //---------------------------------------------
-        // (add03)EasyButton
-        L.easyButton('fas fa-book-open', function(btn, easyMap){
+        // // (add03)EasyButton
+        L.easyButton('fa fa-info-circle', function(btn, easyMap){
             window.open("help/");
-        },'README', {
+        },'説明書を表示', {
         position: 'topright'
-        // position: 'bottomright'
         }).addTo(map);
         //---------------------------------------------
-        // (add04)hash
+        // (add04)LocateControlプラグイン
+        L.control.locate({
+        position: 'topright',
+            strings: {
+                title: "現在地を表示",
+                popup: "いまここ"
+            },
+            locateOptions: {
+                maxZoom: 16
+            }
+        }).addTo(map);
+        //---------------------------------------------
+        // (add99)hashプラグイン
         var hash = new L.Hash(map);
-        hash.addTo(map);
+        // addto多分要らない？
+        // hash.addTo(map);
     }
 
 
