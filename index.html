@@ -163,6 +163,13 @@
             }
         }).addTo(map);
         //---------------------------------------------
+        // (add05)表示位置を初期値に戻すボタン
+        L.easyButton('fa fa-home', function(btn, easyMap){
+            map.setView(m00, 14);
+        },'表示を初期状態に戻す', {
+        position: 'topright'
+        }).addTo(map);
+        //---------------------------------------------
         // (add99)hashプラグイン
         var hash = new L.Hash(map);
         // addto多分要らない？
