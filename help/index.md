@@ -104,6 +104,8 @@ Informationアイコンのボタンを選択することで、この説明書を
 # License
 
 ## バス路線レイヤー
+- ローカル路線バスマップタイル(lbm)
+- 観光地周遊バスマップタイル(sbm)
 ©busroutemap (Creative Commons BY 4.0)
 
 道路形状情報を除く全ては、著作者個人の調査に基づきます
