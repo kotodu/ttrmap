@@ -6,6 +6,8 @@
     <meta name="description" content="鳥取の交通をレイヤー表示した地図です" />
     <meta name="keywords" content="鳥取,路線図,バス,日本交通,日ノ丸自動車,バスマップ,バス路線図,busmap" />
     <title>tottori transportation map</title>
+    <!-- 表示の為の設定 -->
+    <meta name="viewport" content="width=device-width">
     <!-- //--------------------------------------------- -->
     <!-- ここから最優先CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
@@ -111,7 +113,9 @@
         for (var num in data11) {
             var pass = data11[num];
             var pos = [pass["緯度"], pass["経度"]];
-            var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            // 運行事業者情報を削除
+            var con =  pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            // var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
             lbm_m_in.addLayer(L.marker(pos,{icon:i_hn}).bindPopup(pop));
         }
@@ -119,7 +123,8 @@
         for (var num in data12) {
             var pass = data12[num];
             var pos = [pass["緯度"], pass["経度"]];
-            var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            var con =  pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            // var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
             lbm_m_out.addLayer(L.marker(pos,{icon:i_hn}).bindPopup(pop));
         }
@@ -127,7 +132,8 @@
         for (var num in data21) {
             var pass = data21[num];
             var pos = [pass["緯度"], pass["経度"]];
-            var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            var con = pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            // var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
             lbm_m_in.addLayer(L.marker(pos,{icon:i_nh}).bindPopup(pop));
         }
@@ -135,7 +141,8 @@
         for (var num in data22) {
             var pass = data22[num];
             var pos = [pass["緯度"], pass["経度"]];
-            var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            var con = pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
+            // var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
             var pop = L.popup().setContent(con);
             lbm_m_out.addLayer(L.marker(pos,{icon:i_nh}).bindPopup(pop));
         }
@@ -184,8 +191,6 @@
         //---------------------------------------------
         // (add99)hashプラグイン
         var hash = new L.Hash(map);
-        // addto多分要らない？
-        // hash.addTo(map);
     }
 
 
