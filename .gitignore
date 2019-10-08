@@ -2,3 +2,4 @@
 *.txt
 *.BridgeSort
 .vscode/
+private/
