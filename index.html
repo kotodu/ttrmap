@@ -83,12 +83,12 @@
         // ローカルバス群
         // (1.1.1)lbm線情報
         const lbm_lines = L.tileLayer('xyz/lbmli/{z}/{x}/{y}.png', {
-            // PNGによるタイル
             tileSize : 256,
             minNativeZoom: 13,
             minZoom: 13,
             maxNativeZoom: 16,
             maxZoom: 17, 
+            opacity : 0.8,
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         }).addTo(map);
 
