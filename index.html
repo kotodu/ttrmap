@@ -3,10 +3,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <!-- SEO対策多少はした方がいいのだけど？？ -->
     <meta name="description" content="鳥取の交通をレイヤー表示した地図です" />
     <meta name="keywords" content="鳥取,路線図,バス,日本交通,日ノ丸自動車,バスマップ,バス路線図,busmap" />
     <title>tottori transportation map</title>
     <!-- 表示の為の設定 -->
+    <!-- 以下をするとスマホ向けにちょっとだけ描画が改良される -->
     <meta name="viewport" content="width=device-width">
     <!-- //--------------------------------------------- -->
     <!-- ここから最優先CSS -->
@@ -14,14 +16,10 @@
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
     <!-- //--------------------------------------------- -->
     <!-- ここから各プラグイン -->
-    <!-- controlLocate -->
+    <!-- controlLocateプラグイン、現在地表示で使用 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.66.2/dist/L.Control.Locate.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.66.2/dist/L.Control.Locate.min.js" charset="utf-8"></script>
-    <!-- makerクラスタ -->
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <!-- //--------------------------------------------- -->
     <!-- easyボタン アイコンは4.7.0に変更 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
@@ -35,26 +33,40 @@
     <script src="stopinfo/js/data12.js"></script>
     <script src="stopinfo/js/data21.js"></script>
     <script src="stopinfo/js/data22.js"></script>
+    <style>
+        .icon1 {
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+        border: 3px solid rgb(250,250,250);
+        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+        background-color: rgb(204, 51, 166);
+    }
+    </style>
 <script>
     var map;
     // // 鳥取駅
-    var m00 = [35.493795, 134.225827];
+    const m00 = [35.493795, 134.225827];
     //---------------------------------------------
     // (0.1)アイコン群の設定
     // L.maker(pos,{add})のaddに{icon:i_hn}など
-    var i_hn = L.icon({
+    const i_hn = L.icon({
         iconUrl: 'icons/hn.png', 
         iconRetinaUrl: 'icons/hnb.png',
         iconSize: [50, 50],
         iconAnchor: [25, 50],
         popupAnchor: [0, -50],
     });
-    var i_nh = L.icon({
+    const i_nh = L.icon({
         iconUrl: 'icons/nh.png', 
         iconRetinaUrl: 'icons/nhb.png',
         iconSize: [50, 50],
         iconAnchor: [25, 50],
         popupAnchor: [0, -50],
+    });
+    const pickIcon = L.divIcon({
+        className: 'icon1',
+        iconAnchor: [13, 13]
     });
     //---------------------------------------------
     function init() {
@@ -64,24 +76,24 @@
             maxZoom: 17,
         });
         map.setView(m00, 14);
-        L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
+        const base = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
             attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル(淡色)</a>"
         }).addTo(map);
         //---------------------------------------------
         // ローカルバス群
         // (1.1.1)lbm線情報
-        var lbm_lines = L.tileLayer('xyz/lbmli/{z}/{x}/{y}.png', {
-            // PNGによるタイル
+        const lbm_lines = L.tileLayer('xyz/lbmli/{z}/{x}/{y}.png', {
             tileSize : 256,
             minNativeZoom: 13,
             minZoom: 13,
             maxNativeZoom: 16,
             maxZoom: 17, 
-           attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
+            opacity : 0.8,
+            attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         }).addTo(map);
 
         // (1.1.2)lbm追加情報
-        var lbm_infolocal = L.tileLayer('xyz/lbmin/{z}/{x}/{y}.png', {
+        const lbm_infolocal = L.tileLayer('xyz/lbmin/{z}/{x}/{y}.png', {
             tileSize : 256,
             minNativeZoom: 13,
             minZoom: 13,
@@ -90,7 +102,7 @@
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         });
         // (1.2)sbm
-        var sbm = L.tileLayer('xyz/sbm/{z}/{x}/{y}.png', {
+        const sbm = L.tileLayer('xyz/sbm/{z}/{x}/{y}.png', {
             tileSize : 256,
             minNativeZoom: 14,
             minZoom: 13,
@@ -102,55 +114,57 @@
         //(2)バス停位置群
         // lbm_m_in : 上りバス停群
         // lbm_m_out : 下りバス停群
-        var lbm_m_in = L.markerClusterGroup();
-        var lbm_m_out = L.markerClusterGroup();
-        // var lbm_m_in = L.featureGroup();
-        // var lbm_m_out = L.featureGroup();
-        // var sbm = L.markerClusterGroup();
         // (2.1)日ノ丸上り
         // 将来、外国語対応やバス停情報に路線情報をリンクさせる等の場合、
         // conを変えてpass["意訳英語名称"]や<a>路線情報</a>などを検討？
-        for (var num in data11) {
-            var pass = data11[num];
-            var pos = [pass["緯度"], pass["経度"]];
-            // 運行事業者情報を削除
-            var con =  pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
-            // var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
-            var pop = L.popup().setContent(con);
-            lbm_m_in.addLayer(L.marker(pos,{icon:i_hn}).bindPopup(pop));
+        // vuejsでja/enの瞬殺切り替えとかできれば良いのだけども
+        const makeStops = (data, style)=>{ 
+            let markers = [];
+            for (let i in data){
+                const el = data[i];
+                const pos = [el["緯度"],el["経度"]];
+                const pop = L.popup().setContent(
+                    el["上下循環区分"] + '<hr><h2>' + el["バス停名"] +'</h2>'
+                );
+                markers.push(L.marker(pos,{icon:style}).bindPopup(pop));
+            }
+            return markers
         }
-        // (2.2)日ノ丸下り
-        for (var num in data12) {
-            var pass = data12[num];
-            var pos = [pass["緯度"], pass["経度"]];
-            var con =  pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
-            // var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
-            var pop = L.popup().setContent(con);
-            lbm_m_out.addLayer(L.marker(pos,{icon:i_hn}).bindPopup(pop));
-        }
-        // (2.3)日交上り
-        for (var num in data21) {
-            var pass = data21[num];
-            var pos = [pass["緯度"], pass["経度"]];
-            var con = pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
-            // var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
-            var pop = L.popup().setContent(con);
-            lbm_m_in.addLayer(L.marker(pos,{icon:i_nh}).bindPopup(pop));
-        }
-        // (2.4)日交下り
-        for (var num in data22) {
-            var pass = data22[num];
-            var pos = [pass["緯度"], pass["経度"]];
-            var con = pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
-            // var con =  pass["運行事業者"] + pass["上下循環区分"] + '<hr><h2>' + pass["バス停名"] +'</h2>';
-            var pop = L.popup().setContent(con);
-            lbm_m_out.addLayer(L.marker(pos,{icon:i_nh}).bindPopup(pop));
-        }
-
+        // 11 日ノ丸上り
+        // 12 日ノ丸下り
+        // 21 日交上り
+        // 22 日交下り
+        const l11 = makeStops(data11,i_hn);
+        const l12 = makeStops(data12,i_hn);
+        const l21 = makeStops(data21,i_nh);
+        const l22 = makeStops(data22,i_nh);
+        const instops = l11.concat(l21);
+        const outstops = l12.concat(l22)
+        const lbm_m_in = L.layerGroup(instops);
+        const lbm_m_out = L.layerGroup(outstops);
+        //---------------------------------------------
+        // pickup地点
+        // let pickups;
+        // let pop = L.popup().setContent(el.name + '<hr><h2><a onclick="map.setView(el.lat,el.lon)">' + この場所を表示する +'</a></h2>');
+        //---------------------------------------------
+        // pickup絡みはバグが多いので見送り
+        // // マーカーが広域表示の場合、自動的に非表示
+        // map.on('zoomend', function() {
+        // if (map.getZoom() > 12){
+        //     // 狭域の場合、pickupsは非表示
+        //     map.removeLayer(pickups);
+        // } else {
+        //     // 広域の場合、自動的にバス停をオフにする
+        //     // 広域->狭域時には、うーん、どうしようもない
+        //     map.removeLayer(lbm_m_in);
+        //     map.removeLayer(lbm_m_out);
+        //     // 代わりに主要地をオンにする
+        //     map.addLayer(pickups)
+        // }
+        // });
         //---------------------------------------------
         // (add01)レイヤー表示切替
-        // 2019/04/19レイヤーグループの規則変更
-        var overlays = {
+        const overlays = {
             "<b>(路線バス)</b> 停留所 <上り><br>(local bus) stops < inbound ><hr>": lbm_m_in,
             "<b>(路線バス)</b> 停留所 <下り><br>(local bus) stops < outbound ><hr>": lbm_m_out,
             "<b>(路線バス)</b> 経路情報<br>routes(local bus)<hr>": lbm_lines,
@@ -191,6 +205,24 @@
         //---------------------------------------------
         // (add99)hashプラグイン
         var hash = new L.Hash(map);
+        //---------------------------------------------
+        // let viewing = true;
+        // (開発者向け)背景地図非表示機能
+        // let dev = true;
+        // if (dev){
+        //     L.easyButton('fa fa-eye-slash', function(btn, easyMap){
+        //         if (viewing){
+        //             base.remove();
+        //             viewing = false;
+        //         } else {
+        //             base.addTo(map);
+        //             viewing = true;
+        //         }
+        //     },'表示を初期状態に戻す', {
+        //     position: 'topright'
+        //     }).addTo(map);
+        // }
+        //---------------------------------------------
     }
 
 
