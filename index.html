@@ -72,7 +72,7 @@
     function init() {
         map = L.map('map01', { 
             zoomControl: false,
-            minZoom: 12,
+            minZoom: 11,
             maxZoom: 17,
         });
         map.setView(m00, 14);
@@ -85,31 +85,12 @@
         const lbm_lines = L.tileLayer('xyz/lbmli/{z}/{x}/{y}.png', {
             tileSize : 256,
             minNativeZoom: 13,
-            minZoom: 13,
-            maxNativeZoom: 16,
+            minZoom: 12,
+            maxNativeZoom: 15,
             maxZoom: 17, 
             opacity : 0.8,
             attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
         }).addTo(map);
-
-        // (1.1.2)lbm追加情報
-        const lbm_infolocal = L.tileLayer('xyz/lbmin/{z}/{x}/{y}.png', {
-            tileSize : 256,
-            minNativeZoom: 13,
-            minZoom: 13,
-            maxNativeZoom: 16,
-            maxZoom: 17,
-            attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
-        });
-        // (1.2)sbm
-        const sbm = L.tileLayer('xyz/sbm/{z}/{x}/{y}.png', {
-            tileSize : 256,
-            minNativeZoom: 14,
-            minZoom: 13,
-            maxNativeZoom: 16,
-            maxZoom: 17,
-            attribution: "<a href='https://busroutemap.github.io/tottori/index.html' target='_blank'>busroutemap (CC BY 4.0)</a>"
-        });
         //---------------------------------------------
         //(2)バス停位置群
         // lbm_m_in : 上りバス停群
@@ -165,11 +146,9 @@
         //---------------------------------------------
         // (add01)レイヤー表示切替
         const overlays = {
-            "<b>(路線バス)</b> 停留所 <上り><br>(local bus) stops < inbound ><hr>": lbm_m_in,
-            "<b>(路線バス)</b> 停留所 <下り><br>(local bus) stops < outbound ><hr>": lbm_m_out,
-            "<b>(路線バス)</b> 経路情報<br>routes(local bus)<hr>": lbm_lines,
-            "<b>(路線バス)</b> 系統情報<br>Information(local bus)<hr>":lbm_infolocal,
-            "<b>(観光地周遊バス+空港連絡バス)</b> 系統・経路情報 <br>routes + Information(sightseeing bus)<hr>":sbm
+            "<b>(路線バス)</b> 停留所 <上り><br>bus stops < inbound ><hr>": lbm_m_in,
+            "<b>(路線バス)</b> 停留所 <下り><br>bus stops < outbound ><hr>": lbm_m_out,
+            "<b>(バス・鉄道)</b> 経路・情報<br>routes<hr>": lbm_lines,
         }
         //---------------------------------------------
         //layersコントロールのオーバーレイに設定
