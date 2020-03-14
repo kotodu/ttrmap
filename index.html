@@ -29,10 +29,6 @@
     <!-- 上のhash.jsは外部プラグイン -->
     <!-- ここから独自 -->
     <link rel="stylesheet" href="add/main.css">
-    <script src="stopinfo/js/data11.js"></script>
-    <script src="stopinfo/js/data12.js"></script>
-    <script src="stopinfo/js/data21.js"></script>
-    <script src="stopinfo/js/data22.js"></script>
     <style>
         .icon1 {
         width: 30px;
@@ -68,8 +64,40 @@
         className: 'icon1',
         iconAnchor: [13, 13]
     });
+    const loadjson = (addURL)=>{
+        const baseURL = "https://busroutemap.github.io/ttrmap/";
+        // var data;
+        return fetch(baseURL+addURL)
+        .then(response=> {
+            if (response.ok){
+                // httpレスポンスからjsonを抽出
+                return response.json();
+            } else{
+                Promise.reject(new Error("error"))
+            }
+        })
+        .catch(e=>{
+            console.log(e.message);
+        });
+    }
     //---------------------------------------------
-    function init() {
+    const init = async()=> {
+        let pAll = [];
+        pAll.push(loadjson("stopinfo/data_11.json"));
+        pAll.push(loadjson("stopinfo/data_12.json"));
+        pAll.push(loadjson("stopinfo/data_21.json"));
+        pAll.push(loadjson("stopinfo/data_22.json"));
+        var data11,data12,data21,data22;
+        await Promise.all(pAll)
+        .catch(e=>{
+            console.log(e);
+        })
+        .then(r=>{
+            data11 = r[0];
+            data12 = r[1];
+            data21 = r[2];
+            data22 = r[3];
+        });
         map = L.map('map01', { 
             zoomControl: false,
             minZoom: 11,
