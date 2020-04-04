@@ -87,7 +87,8 @@
         pAll.push(loadjson("stopinfo/data_12.json"));
         pAll.push(loadjson("stopinfo/data_21.json"));
         pAll.push(loadjson("stopinfo/data_22.json"));
-        var data11,data12,data21,data22;
+        pAll.push(loadjson("add/clipNote20200404.geojson"))
+        var data11,data12,data21,data22,clipnotes;
         await Promise.all(pAll)
         .catch(e=>{
             console.log(e);
@@ -97,6 +98,7 @@
             data12 = r[1];
             data21 = r[2];
             data22 = r[3];
+            clipnotes = r[4];
         });
         map = L.map('map01', { 
             zoomControl: false,
@@ -172,6 +174,17 @@
         //     map.addLayer(pickups)
         // }
         // });
+        //---------------------------------------------
+        // (11)注記レイヤー
+        const clips = L.geoJSON(clipnotes,{
+            attribution : "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院地図</a>にて座標を収集"
+        })
+        .bindPopup((layer) => {
+            const name = layer.feature.properties.name;
+            const desc = layer.feature.properties.description;
+            const content = `<h3>${name}</h3>${desc}`;
+            return content;
+        }).addTo(map);
         //---------------------------------------------
         // (add01)レイヤー表示切替
         const overlays = {
