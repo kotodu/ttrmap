@@ -1,0 +1,83 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "鳥取駅バスターミナル",
+        "id": "101",
+        "type": "主要場所",
+        "description": "「鳥取駅」から出るバスは、この施設から発車します",
+        "_markerType": "Icon",
+        "_iconUrl": "https://maps.gsi.go.jp/portal/sys/v4/symbols/080.png",
+        "_iconSize": [
+          20,
+          20
+        ],
+        "_iconAnchor": [
+          10,
+          10
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.225426,
+          35.494805
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "本通り",
+        "id": "201",
+        "type": "系統注記",
+        "description": "中河原線の一部便は、鳥取駅を経由せず、ここから湖山鳥大線に直通します。",
+        "_markerType": "Icon",
+        "_iconUrl": "https://maps.gsi.go.jp/portal/sys/v4/symbols/080.png",
+        "_iconSize": [
+          20,
+          20
+        ],
+        "_iconAnchor": [
+          10,
+          10
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.228961,
+          35.496792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "鳥取駅",
+        "id": "202",
+        "type": "系統注記",
+        "description": "市内岩倉線の一部は、湖山鳥大線国体道路経由便に直通します(平日朝1便のみ)",
+        "_markerType": "Icon",
+        "_iconUrl": "https://maps.gsi.go.jp/portal/sys/v4/symbols/080.png",
+        "_iconSize": [
+          20,
+          20
+        ],
+        "_iconAnchor": [
+          10,
+          10
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.2243,
+          35.495115
+        ]
+      }
+    }
+  ]
+}
