@@ -180,4 +180,3 @@ const init = async () => {
     new L.Hash(map);
     //---------------------------------------------
 }
-export default init;
