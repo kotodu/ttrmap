@@ -134,7 +134,7 @@
             // conを変えてpass["意訳英語名称"]や<a>路線情報</a>などを検討？
             // vuejsでja/enの瞬殺切り替えとかできれば良いのだけども
             const makeStops = (stops, style) => {
-                const markers = stops.value().map(stop => {
+                const markers = stops.values().map(stop => {
                     const position = [
                         stop["緯度"],
                         stop["経度"]
